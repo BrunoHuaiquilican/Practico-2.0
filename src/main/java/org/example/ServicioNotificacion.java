@@ -1,5 +1,5 @@
 package org.example;
 
-public interface Notificacion {
+public interface ServicioNotificacion {
     void enviarEmail(String destinatario, String asunto, String cuerpo);
 }

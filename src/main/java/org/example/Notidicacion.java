@@ -1,27 +1,20 @@
 package org.example;
 
 import java.util.Properties;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.Authenticator;
+import javax.mail.*;
+import javax.mail.internet.*;
 
-public class NotificarEmail {
+public class Notidicacion implements ServicioNotificacion {
 
-    public void enviarNotificacionAnfitrion(String destinatario) {
-        // Configuración del servidor SMTP de Mailtrap
+    public void enviarEmail(String destinatario, String asunto, String cuerpo) {
         String host = "sandbox.smtp.mailtrap.io";
-        int puerto = 587; // Puedes usar también 25, 465 o 2525
+        int puerto = 587;
         final String usuario = "c8a6b699a18312";
-        final String contrasena = "1d18b7e08077af"; // Reemplaza con la contraseña real
+        final String contrasena = "1d18b7e08077af";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true"); // STARTTLS
+        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", puerto);
 
@@ -35,11 +28,10 @@ public class NotificarEmail {
             Message mensaje = new MimeMessage(session);
             mensaje.setFrom(new InternetAddress("hotel@ejemplo.com"));
             mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-            mensaje.setSubject("Notificación para el Anfitrión");
-            mensaje.setText("¡Hola Anfitrión! Tienes una nueva reserva que revisar.");
+            mensaje.setSubject(asunto);
+            mensaje.setText(cuerpo);
 
             Transport.send(mensaje);
-
         } catch (MessagingException e) {
             e.printStackTrace();
         }

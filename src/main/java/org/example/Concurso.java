@@ -10,10 +10,10 @@ public class Concurso {
     private LocalDate fechaInicio;
     private LocalDate fechaCierre;
     private List<Participante> inscritos;
-    private NotificarFake notificacion;
+    private ServicioNotificacion servicioNotificacion;
 
     public Concurso(String nombre, LocalDate fechaInicio, LocalDate fechaCierre,
-                    NotificarFake notificacion) {
+                    ServicioNotificacion notificacion) {
         if(nombre.trim().isEmpty()){
             throw new IllegalArgumentException("El nombre del concurso no puede estar vacío");
         }
@@ -27,14 +27,15 @@ public class Concurso {
         this.fechaInicio = fechaInicio;
         this.fechaCierre = fechaCierre;
         this.inscritos = new ArrayList<>();
-        this.notificacion = notificacion;
+        this.servicioNotificacion = notificacion;
 
     }
 
     public boolean validarIncripcion(LocalDate fecha, Participante participante) throws Exception {
         if (!fecha.isBefore(fechaInicio) && !fecha.isAfter(fechaCierre)) {
             inscritos.add(participante);
-            notificacion.enviarEmail(participante.getNombre(), "Inscripción exitosa", "Te has inscrito al concurso " + nombre);
+            servicioNotificacion.enviarEmail(participante.getEmail(), "Inscripción exitosa",
+                    "Te has inscrito exitosamente al concurso " + nombre);
 
             return true;
         }

@@ -1,41 +1,77 @@
 package test.unr;
 import org.example.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConcursoTest {
 
     @Test
-    void testInscripcionConNotificacionFake() throws Exception {
-        // Fake de notificación
-        NotificarFake notificadorFake = new NotificarFake();
+    public void testValidarInscripcionConNotificacionExitosa() throws Exception {
 
-        // Creamos el concurso solo con la notificación fake
-        Concurso concurso = new Concurso(
-                "Concurso Fotografía",
-                LocalDate.of(2024, 3, 1),
-                LocalDate.of(2024, 3, 31),
-                notificadorFake
-        );
+        NotificarFake notificacionFake = new NotificarFake();
+        LocalDate fechaInicio = LocalDate.of(2025, 4, 1);
+        LocalDate fechaCierre = LocalDate.of(2025, 4, 30);
+        Concurso concurso = new Concurso("Concurso de Ciencia", fechaInicio, fechaCierre, notificacionFake);
+        Participante participante = new Participante("Juan", "Pérez", "juan@example.com");
+        LocalDate fechaInscripcion = LocalDate.of(2025, 4, 5);
 
-        // Participante y fecha de inscripción válida
-        Participante participante = new Participante("Juan Pérez", "Perez");
-        LocalDate fecha = LocalDate.of(2024, 3, 10);
 
-        // Ejecutamos inscripción
-        boolean resultado = concurso.validarIncripcion(fecha, participante);
+        boolean resultado = concurso.validarIncripcion(fechaInscripcion, participante);
 
-        // Verificamos
+
         assertTrue(resultado);
-        assertTrue(concurso.participanteInscripto(participante));
-        assertTrue(notificadorFake.fueLlamado());
+        assertTrue(notificacionFake.fueLlamado());
+        assertEquals("juan@example.com", notificacionFake.getDestinatario());
+        assertEquals("Inscripción exitosa", notificacionFake.getAsunto());
+        assertTrue(notificacionFake.getCuerpo().contains("Concurso de Ciencia"));
+    }
+    @Test
+    public void testRegistroDeInscripcionConFake() throws Exception {
+        // Arrange
+        NotificarFake notificacionFake = new NotificarFake();
+        RegistrarIncripcionFake registroFake = new RegistrarIncripcionFake();
+
+        LocalDate fechaInicio = LocalDate.of(2025, 4, 1);
+        LocalDate fechaCierre = LocalDate.of(2025, 4, 30);
+        Concurso concurso = new Concurso("Concurso de Matemáticas", fechaInicio, fechaCierre, notificacionFake);
+        Participante participante = new Participante("Ana", "Gómez", "ana@example.com");
+        LocalDate fechaInscripcion = LocalDate.of(2025, 4, 10);
+
+
+        boolean resultado = concurso.validarIncripcion(fechaInscripcion, participante);
+        registroFake.registrarInscripcionArchivo(concurso, participante, fechaInscripcion);
+
+
+        assertTrue(resultado);
+        assertTrue(notificacionFake.fueLlamado());
+        assertTrue(registroFake.fueLlamado());
+
+
+        String datosEsperados = "Concurso de Matemáticas,0," + participante.getIdParticipante() + ",Ana,2025-04-10";
+        assertEquals(datosEsperados, registroFake.datosRegistrados());
+    }
+    @Test
+    public void testGenerarRegistroTxtFake() throws Exception {
+
+        GenerarRegistroTxtFake registroTxtFake = new GenerarRegistroTxtFake();
+        NotificarFake notificacionFake = new NotificarFake();
+
+        Concurso concurso = new Concurso("Fotografía", LocalDate.of(2025, 4, 1),
+                LocalDate.of(2025, 4, 20), notificacionFake);
+        Participante participante = new Participante("Lucas", "Ruiz", "lucas@correo.com");
+        LocalDate fecha = LocalDate.of(2025, 4, 5);
+
+
+        boolean inscripto = concurso.validarIncripcion(fecha, participante);
+        registroTxtFake.registrarInscripcionArchivo(concurso, participante, fecha);
+
+
+        assertTrue(inscripto);
+        assertTrue(registroTxtFake.fueRegistrado());
+
+        String esperado = "Fotografía,0," + participante.getIdParticipante() + ",Lucas,2025-04-05";
+        assertEquals(esperado, registroTxtFake.getLineaGenerada());
     }
 }
+

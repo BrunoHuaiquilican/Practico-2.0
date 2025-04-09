@@ -3,23 +3,29 @@ package org.example;
 import java.util.Objects;
 
 public class Participante {
-    private static int contadorId = 1; // Contador estático para asignar id únicos
+    private static int contadorId = 1;
     private int idParticipante;
     private String nombre;
     private String apellido;
+    private String email;
     private int puntos;
 
-    public Participante(String nombre, String apellido) {
+    public Participante(String nombre, String apellido, String email) {
         if (nombre.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
         }
         if (apellido.trim().isEmpty()) {
             throw new IllegalArgumentException("El apellido no puede estar vacío");
         }
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("El email no es válido");
+        }
         this.nombre = nombre;
         this.apellido = apellido;
-        this.idParticipante = contadorId++; // Asigna un id único a cada participante
+        this.email = email;
+        this.idParticipante = contadorId++;
     }
+
 
     public void cargarPuntos(int puntos){
         this.puntos += puntos;
@@ -46,4 +52,7 @@ public class Participante {
         return puntos;
     }
 
+    public String getEmail() {
+        return email;
+    }
 }
