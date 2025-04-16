@@ -1,5 +1,6 @@
 package segundoo.punto;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,11 @@ public class Mesa {
     private double totalPreciosPlatos;
     private boolean confirmarPedido ;
     private Propina propina;
+    private GenerarRegistro generarRegistro;
+    private ServicioNotificacion notificacion;
 
 
-    public Mesa(int numeroDeMesa, int capacidad, Propina tres) {
+    public Mesa(int numeroDeMesa, int capacidad, Propina tres , ServicioNotificacion notificacion, GenerarRegistro generarRegistro) {
         if (numeroDeMesa <= 0) {
             throw new IllegalArgumentException("El numero de mesa no puede ser menor o igual a 0");
         }
@@ -27,6 +30,9 @@ public class Mesa {
         this.totalPreciosPlatos = 0;
         this.confirmarPedido = false;
         this.propina = null;
+        this.notificacion = notificacion;
+        this.generarRegistro = generarRegistro;
+
     }
 
     public void agregarPlatos(Plato plato){
@@ -57,7 +63,9 @@ public class Mesa {
         double descuento = tarjeta.calcularDescuento(totalPlatos, totalBebidas);
         return descuento;
     }
-
+    public double estraerTotaldeLaCuenta() {
+        return calcularTotalPlatos() + calcularTotalBebidas();
+    }
 
 
 }

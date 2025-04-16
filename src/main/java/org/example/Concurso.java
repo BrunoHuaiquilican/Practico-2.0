@@ -11,9 +11,10 @@ public class Concurso {
     private LocalDate fechaCierre;
     private List<Participante> inscritos;
     private ServicioNotificacion servicioNotificacion;
+    private GenerarRegistro generarRegistro;
 
     public Concurso(String nombre, LocalDate fechaInicio, LocalDate fechaCierre,
-                    ServicioNotificacion notificacion) {
+                    ServicioNotificacion notificacion , GenerarRegistro generarRegistro) {
         if(nombre.trim().isEmpty()){
             throw new IllegalArgumentException("El nombre del concurso no puede estar vacío");
         }
@@ -28,6 +29,7 @@ public class Concurso {
         this.fechaCierre = fechaCierre;
         this.inscritos = new ArrayList<>();
         this.servicioNotificacion = notificacion;
+        this.generarRegistro = generarRegistro;
 
     }
 

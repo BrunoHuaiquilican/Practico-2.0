@@ -10,9 +10,10 @@ public class ConcursoTest {
     public void testValidarInscripcionConNotificacionExitosa() throws Exception {
 
         NotificarFake notificacionFake = new NotificarFake();
+        RegistrarIncripcionFake registroFake = new RegistrarIncripcionFake();
         LocalDate fechaInicio = LocalDate.of(2025, 4, 1);
         LocalDate fechaCierre = LocalDate.of(2025, 4, 30);
-        Concurso concurso = new Concurso("Concurso de Ciencia", fechaInicio, fechaCierre, notificacionFake);
+        Concurso concurso = new Concurso("Concurso de Ciencia", fechaInicio, fechaCierre, notificacionFake , registroFake  );
         Participante participante = new Participante("Juan", "Pérez", "juan@example.com");
         LocalDate fechaInscripcion = LocalDate.of(2025, 4, 5);
 
@@ -34,7 +35,7 @@ public class ConcursoTest {
 
         LocalDate fechaInicio = LocalDate.of(2025, 4, 1);
         LocalDate fechaCierre = LocalDate.of(2025, 4, 30);
-        Concurso concurso = new Concurso("Concurso de Matemáticas", fechaInicio, fechaCierre, notificacionFake);
+        Concurso concurso = new Concurso("Concurso de Matemáticas", fechaInicio, fechaCierre, notificacionFake , registroFake );
         Participante participante = new Participante("Ana", "Gómez", "ana@example.com");
         LocalDate fechaInscripcion = LocalDate.of(2025, 4, 10);
 
@@ -58,7 +59,7 @@ public class ConcursoTest {
         NotificarFake notificacionFake = new NotificarFake();
 
         Concurso concurso = new Concurso("Fotografía", LocalDate.of(2025, 4, 1),
-                LocalDate.of(2025, 4, 20), notificacionFake);
+                LocalDate.of(2025, 4, 20), notificacionFake , registroTxtFake);
         Participante participante = new Participante("Lucas", "Ruiz", "lucas@correo.com");
         LocalDate fecha = LocalDate.of(2025, 4, 5);
 
